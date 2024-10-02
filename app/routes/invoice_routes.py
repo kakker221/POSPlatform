@@ -1,7 +1,7 @@
 # app/routes/invoice_routes.py
 
 from flask import Blueprint, render_template, redirect, url_for, request
-from app.models import Product, Invoice
+from app.models import Product, Invoice, Supplier
 from app import db
 from app.models import Product, Invoice 
 from app.forms.invoice_form import InvoiceForm 
@@ -14,8 +14,8 @@ invoice_routes = Blueprint('invoices', __name__)
 def add_invoice():
     form = InvoiceForm()
 
-    # Populate existing product choices
     form.existing_product.choices = [(str(product.id), product.name) for product in Product.query.all()]
+    form.existing_supplier.choices = [(str(supplier.id), supplier.name) for supplier in Supplier.query.all()]
 
     if form.validate_on_submit():
         # Get or create the product

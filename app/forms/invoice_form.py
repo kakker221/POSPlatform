@@ -6,7 +6,8 @@ class InvoiceForm(FlaskForm):
     # General invoice details
     invoice_number = StringField('Invoice Number', validators=[DataRequired()])
     invoice_date = DateField('Invoice Date', validators=[DataRequired()])
-    supplier_name = StringField('Supplier Name', validators=[DataRequired()])
+    existing_supplier = SelectField('Existing Supplier', choices=[], validators=[Optional()]) 
+    new_supplier_name = StringField('New Supplier Name', validators=[Optional()])  
     
     # Product fields
     existing_product = SelectField('Existing Product', choices=[], validators=[Optional()])  # Allow for existing product
