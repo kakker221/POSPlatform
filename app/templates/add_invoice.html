@@ -38,11 +38,14 @@
 
             <!-- Supplier Name -->
             <div class="form-group">
-                <label for="supplier_name">Supplier Name</label>
-                {{ form.supplier_name(class="form-control") }}
-                {% if form.supplier_name.errors %}
-                <small class="text-danger">{{ form.supplier_name.errors[0] }}</small>
-                {% endif %}
+                <label for="existing_supplier">{{ form.existing_supplier.label }}</label>
+                {{ form.existing_supplier(class="form-control") }}
+            </div>
+            
+            <!-- New Supplier Textbox -->
+            <div class="form-group">
+                <label for="new_supplier_name">{{ form.new_supplier_name.label }}</label>
+                {{ form.new_supplier_name(class="form-control") }}
             </div>
 
             <!-- Existing Product Dropdown -->
