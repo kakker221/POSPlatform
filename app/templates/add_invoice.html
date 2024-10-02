@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Invoice</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h2>Add Invoice</h2>
+
+        <!-- Display the form -->
+        <form method="POST" action="{{ url_for('invoices.add_invoice') }}">
+            <!-- CSRF Token for Flask-WTF -->
+            {{ form.hidden_tag() }}
+
+            <!-- Invoice Number -->
+            <div class="form-group">
+                <label for="invoice_number">Invoice Number</label>
+                {{ form.invoice_number(class="form-control") }}
+                {% if form.invoice_number.errors %}
+                <small class="text-danger">{{ form.invoice_number.errors[0] }}</small>
+                {% endif %}
+            </div>
+
+            <!-- Invoice Date -->
+            <div class="form-group">
+                <label for="invoice_date">Invoice Date</label>
+                {{ form.invoice_date(class="form-control") }}
+                {% if form.invoice_date.errors %}
+                <small class="text-danger">{{ form.invoice_date.errors[0] }}</small>
+                {% endif %}
+            </div>
+
+            <!-- Supplier Name -->
+            <div class="form-group">
+                <label for="supplier_name">Supplier Name</label>
+                {{ form.supplier_name(class="form-control") }}
+                {% if form.supplier_name.errors %}
+                <small class="text-danger">{{ form.supplier_name.errors[0] }}</small>
+                {% endif %}
+            </div>
+
+            <!-- Existing Product Dropdown -->
+            <div class="form-group">
+                <label for="existing_product">Existing Product</label>
+                {{ form.existing_product(class="form-control") }}
+                {% if form.existing_product.errors %}
+                <small class="text-danger">{{ form.existing_product.errors[0] }}</small>
+                {% endif %}
+            </div>
+
+            <!-- New Product Name (if adding a new product) -->
+            <div class="form-group">
+                <label for="new_product_name">New Product Name</label>
+                {{ form.new_product_name(class="form-control") }}
+                {% if form.new_product_name.errors %}
+                <small class="text-danger">{{ form.new_product_name.errors[0] }}</small>
+                {% endif %}
+            </div>
+
+            <!-- Quantity Received -->
+            <div class="form-group">
+                <label for="quantity_received">Quantity Received</label>
+                {{ form.quantity_received(class="form-control") }}
+                {% if form.quantity_received.errors %}
+                <small class="text-danger">{{ form.quantity_received.errors[0] }}</small>
+                {% endif %}
+            </div>
+
+            <!-- Unit Price -->
+            <div class="form-group">
+                <label for="unit_price">Unit Price</label>
+                {{ form.unit_price(class="form-control") }}
+                {% if form.unit_price.errors %}
+                <small class="text-danger">{{ form.unit_price.errors[0] }}</small>
+                {% endif %}
+            </div>
+
+            <!-- Total Price (optional) -->
+            <div class="form-group">
+                <label for="total_price">Total Price (Optional)</label>
+                {{ form.total_price(class="form-control") }}
+            </div>
+
+            <!-- Delivery Date (optional) -->
+            <div class="form-group">
+                <label for="delivery_date">Delivery Date (Optional)</label>
+                {{ form.delivery_date(class="form-control") }}
+            </div>
+
+            <!-- Notes -->
+            <div class="form-group">
+                <label for="notes">Notes</label>
+                {{ form.notes(class="form-control", rows="3") }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+
+    <!-- Optional Bootstrap JS for any frontend enhancements -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
