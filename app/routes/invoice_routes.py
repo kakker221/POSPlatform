@@ -2,9 +2,11 @@
 
 from flask import Blueprint, render_template, redirect, url_for, request
 from app.models import Product, Invoice
-from app import db  # Import db here
-from app.models import Product, Invoice  # Import models here
-from app.forms.invoice_form import InvoiceForm  # Import form here
+from app import db
+from app.models import Product, Invoice 
+from app.forms.invoice_form import InvoiceForm 
+from app.helpers.invoice_helpers import get_or_create_product, create_invoice
+
 
 invoice_routes = Blueprint('invoices', __name__)
 
@@ -12,46 +14,28 @@ invoice_routes = Blueprint('invoices', __name__)
 def add_invoice():
     form = InvoiceForm()
 
-    # Populate product choices from existing products in the system
-    form.existing_product.choices = [(product.id, product.name) for product in Product.query.all()]
+    # Populate existing product choices
+    form.existing_product.choices = [(str(product.id), product.name) for product in Product.query.all()]
 
     if form.validate_on_submit():
-        # Check if the user selected an existing product or entered a new product
-        if form.existing_product.data:
-            # Retrieve the product from the database (existing product)
-            product = Product.query.get(form.existing_product.data)
-        elif form.new_product_name.data:
-            # If the product does not exist, create a new product
-            product = Product(
-                name=form.new_product_name.data,
-                stock=form.quantity_received.data  # Initialize stock with received quantity
-            )
-            db.session.add(product)
-            db.session.commit()  # Commit the new product to get its ID
-        else:
-            # Handle the case where neither product selection nor new product is provided
+        # Get or create the product
+        product = get_or_create_product(form)
+
+        if not product:
+            # If no product was selected or entered, return error
             return render_template('add_invoice.html', form=form, error="Please select or add a product.")
 
-        # Update the product's stock based on quantity received
+        # Update the product's stock
         product.stock += form.quantity_received.data
+        db.session.commit()  # Commit the updated stock
 
-        # Create a new invoice record
-        new_invoice = Invoice(
-            invoice_number=form.invoice_number.data,
-            invoice_date=form.invoice_date.data,
-            supplier_name=form.supplier_name.data,
-            product_id=product.id,  # Link the product ID (whether new or existing)
-            quantity_received=form.quantity_received.data,
-            unit_price=form.unit_price.data,
-            total_price=form.unit_price.data * form.quantity_received.data,
-            delivery_date=form.delivery_date.data,
-            notes=form.notes.data
-        )
+        # Create the invoice
+        new_invoice = create_invoice(form, product)
 
-        # Save changes to the database
+        # Save the invoice to the database
         db.session.add(new_invoice)
         db.session.commit()
 
-        return redirect(url_for('invoices.view_invoices'))  # Redirect to invoice listing page (assuming it exists)
+        return redirect(url_for('invoices.view_invoices'))
 
     return render_template('add_invoice.html', form=form)
